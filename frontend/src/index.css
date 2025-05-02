@@ -13,6 +13,26 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.gradient-bg {
+  background: linear-gradient(135deg, #4ade80 0%, #3b82f6 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #4ade80 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-border {
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #4ade80 0%, #3b82f6 100%) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -45,7 +65,7 @@ button {
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.25s;
 }
 
 button:hover {

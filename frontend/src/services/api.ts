@@ -1,15 +1,33 @@
 const API_URL = 'http://localhost:3000';
 
+export interface AgentResponse {
+    agent: string;
+    content: string;
+    timestamp: string;
+}
+
 export interface HealthConcern {
     content: string;
-    userId?: string;
+}
+
+export interface HealthSuggestion {
+    scientific: string[];
+    holistic: string[];
 }
 
 export interface HealthResponse {
-    status: string;
-    message: string;
-    userId: string;
-    response: string;
+    mental: {
+        scientific: string[];
+        holistic: string[];
+    };
+    physical: {
+        scientific: string[];
+        holistic: string[];
+    };
+    spiritual: {
+        scientific: string[];
+        holistic: string[];
+    };
 }
 
 export interface UserResponses {
@@ -22,24 +40,24 @@ export interface UserResponses {
 }
 
 export const api = {
-    async checkHealth(): Promise<{ status: string; message: string }> {
-        const response = await fetch(`${API_URL}/health`);
+    checkHealth: async (): Promise<{ status: string }> => {
+        const response = await fetch(`${API_URL}/api/health`);
         return response.json();
     },
 
-    async submitHealthConcern(data: HealthConcern): Promise<HealthResponse> {
-        const response = await fetch(`${API_URL}/api/health-concern`, {
+    submitHealthConcern: async (concern: HealthConcern): Promise<AgentResponse[]> => {
+        const response = await fetch(`${API_URL}/api/health/concern`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(concern),
         });
         return response.json();
     },
 
-    async getUserResponses(userId: string): Promise<UserResponses> {
-        const response = await fetch(`${API_URL}/api/responses/${userId}`);
+    getUserResponses: async (): Promise<AgentResponse[]> => {
+        const response = await fetch(`${API_URL}/api/user-responses`);
         return response.json();
     }
 }; 
