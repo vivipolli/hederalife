@@ -33,6 +33,14 @@ export const Header = () => {
         }}>
             <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img 
+                        src="/logo.png" 
+                        alt="Hedera Life Logo" 
+                        style={{ 
+                            height: '32px', 
+                            marginRight: '12px' 
+                        }} 
+                    />
                     <span style={{ fontSize: '20px', fontWeight: 600, color: '#fff' }}>Hedera Life</span>
                 </div>
                 <Dropdown overlay={profileMenu} placement="bottomRight">

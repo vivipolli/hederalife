@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { Tabs, Button, Input, Tag, Checkbox, message, Card, Space } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, HeartOutlined, BulbOutlined, TeamOutlined } from '@ant-design/icons';
 
 const { TextArea } = Input;
 
@@ -87,7 +87,12 @@ export const HealthConcernForm = () => {
     const items = [
         {
             key: 'mental',
-            label: 'Mental Health',
+            label: (
+                <span>
+                    <BulbOutlined style={{ marginRight: '8px' }} />
+                    Mental
+                </span>
+            ),
             children: (
                 <Card style={{ 
                     background: 'linear-gradient(135deg, #2d84eb11 0%, #8259ef11 100%)',
@@ -109,7 +114,12 @@ export const HealthConcernForm = () => {
         },
         {
             key: 'physical',
-            label: 'Physical Health',
+            label: (
+                <span>
+                    <HeartOutlined style={{ marginRight: '8px' }} />
+                    Physical
+                </span>
+            ),
             children: (
                 <Card style={{ 
                     background: 'linear-gradient(135deg, #2d84eb11 0%, #8259ef11 100%)',
@@ -131,7 +141,12 @@ export const HealthConcernForm = () => {
         },
         {
             key: 'spiritual',
-            label: 'Spiritual Health',
+            label: (
+                <span>
+                    <TeamOutlined style={{ marginRight: '8px' }} />
+                    Spiritual
+                </span>
+            ),
             children: (
                 <Card style={{ 
                     background: 'linear-gradient(135deg, #2d84eb11 0%, #8259ef11 100%)',
@@ -201,9 +216,19 @@ export const HealthConcernForm = () => {
 
                     {responses.length > 0 && (
                         <div style={{ marginTop: '32px' }}>
+                            <div style={{ 
+                                textAlign: 'center', 
+                                marginBottom: '24px',
+                                color: '#666',
+                                fontSize: '16px',
+                                lineHeight: '1.5'
+                            }}>
+                                Our suggestions are presented in an integrated way, considering different aspects of human well-being and approaches to health. Each recommendation is carefully analyzed from multiple perspectives to provide you with comprehensive guidance.
+                            </div>
                             <Tabs 
                                 items={items} 
                                 defaultActiveKey="mental"
+                                centered
                             />
                         </div>
                     )}
