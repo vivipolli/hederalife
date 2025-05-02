@@ -1,0 +1,38 @@
+{
+  "name": "@hashgraph/chat",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha test/**/*.test.js --timeout 10000",
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hashgraph/sdk": "2.59.0",
+    "@langchain/core": "^0.3.50",
+    "@langchain/langgraph": "^0.2.67",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.17.1",
+    "hedera-agent-kit": "^1.0.6",
+    "inquirer": "^7.0.4",
+    "open": "^7.0.0",
+    "socket.io": "^2.4.0",
+    "text-encoding": "^0.7.0",
+    "zod": "^3.24.3"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "nodemon": "^3.0.1",
+    "supertest": "^6.3.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Cooper-Kunz/hello-hedera-chat-js.git"
+  }
+}

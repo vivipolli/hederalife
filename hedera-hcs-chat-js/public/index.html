@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health Habit Assistant</title>
+</head>
+
+<body>
+  <div id="app">
+    <div class="app-container">
+      <h1>Health Habit Assistant</h1>
+
+      <form id="healthForm" class="input-form">
+        <textarea id="userInput" placeholder="Describe your health concern or goal..." class="input-field"></textarea>
+        <button type="submit" class="submit-button">Get Suggestions</button>
+      </form>
+
+      <div id="suggestions" class="suggestions-container" style="display: none;">
+        <h2>Suggested Habits</h2>
+        <ul class="suggestions-list"></ul>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/index.js"></script>
+</body>
+
+</html>
