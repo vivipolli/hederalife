@@ -1,6 +1,4 @@
-import { Client, TopicId, TopicMessageSubmitTransaction, TopicMessageQuery } from "@hashgraph/sdk";
-import { handleLog } from "../utils.js";
-import { processHealthConcern } from '../agent.js';
+import { TopicMessageSubmitTransaction, TopicMessageQuery } from "@hashgraph/sdk";
 import { createInstance as createLlmInstance } from '../api/openrouter-openai.js';
 
 class LangChainAgent {
@@ -13,7 +11,6 @@ class LangChainAgent {
         this.lastResponse = null;
     }
 
-    // Format response according to HCS-10 standard
     formatResponse(content, suggestions) {
         return {
             p: "hcs-10",
@@ -28,19 +25,15 @@ class LangChainAgent {
         };
     }
 
-    // Send formatted response to HCS topic
     async sendResponse(formattedResponse) {
         try {
             const message = JSON.stringify(formattedResponse);
-            console.log(`[${this.agentType}] Submitting message to topic:`, message);
-            
             const transaction = await new TopicMessageSubmitTransaction()
                 .setTopicId(this.topicId)
                 .setMessage(message)
                 .execute(this.hederaClient);
 
-            const receipt = await transaction.getReceipt(this.hederaClient);
-            console.log(`[${this.agentType}] Message submitted successfully:`, receipt.status);
+            await transaction.getReceipt(this.hederaClient);
             return true;
         } catch (error) {
             console.error(`[${this.agentType}] Error sending response:`, error);
@@ -48,47 +41,38 @@ class LangChainAgent {
         }
     }
 
-    // Process incoming messages and generate suggestions using LangChain
     async processMessage(messageData) {
-        console.log(`[${this.agentType}] Processing message:`, messageData);
-        
         if (messageData.type === "user_report") {
             try {
                 const content = messageData.concern;
-                console.log(`[${this.agentType}] Generating suggestions for:`, content);
                 
-                // Check cache for similar content
                 if (this.lastResponse && this.lastResponse.originalContent === content) {
-                    console.log(`[${this.agentType}] Using cached response for similar content`);
                     return await this.sendResponse(this.lastResponse);
                 }
                 
                 const prompt = `As a ${this.agentType} expert, analyze this health concern and provide specific, actionable suggestions in the following format:
 
-            Mental Health:
-            - Scientific: [evidence-based approaches]
-            - Holistic: [mind-body approaches]
+                Mental Health:
+                - Scientific: [evidence-based approaches]
+                - Holistic: [mind-body approaches]
 
-            Physical Health:
-            - Scientific: [evidence-based approaches]
-            - Holistic: [mind-body approaches]
+                Physical Health:
+                - Scientific: [evidence-based approaches]
+                - Holistic: [mind-body approaches]
 
-            Spiritual Health:
-            - Scientific: [evidence-based approaches]
-            - Holistic: [mind-body approaches]
+                Spiritual Health:
+                - Scientific: [evidence-based approaches]
+                - Holistic: [mind-body approaches]
 
-            Focus on your area of expertise (${this.agentType}) and provide specific, actionable suggestions.`;
+                Focus on your area of expertise (${this.agentType}) and provide specific, actionable suggestions.`;
                 
-                console.log(`[${this.agentType}] Sending prompt to OpenRouter:`, prompt);
                 const response = await this.llm.invoke([{ role: "user", content: prompt }]);
-                console.log(`[${this.agentType}] Received response from OpenRouter:`, response);
                 
                 if (!response || !response.content) {
                     console.error(`[${this.agentType}] Invalid response format from OpenRouter:`, response);
                     return false;
                 }
 
-                // Store the raw response
                 this.lastResponse = {
                     type: "agent_response",
                     agent: this.agentType,
@@ -97,7 +81,6 @@ class LangChainAgent {
                     timestamp: new Date().toISOString()
                 };
                 
-                // Format response according to HCS-10 standard
                 const formattedResponse = {
                     p: "hcs-10",
                     op: "message",
@@ -115,10 +98,8 @@ class LangChainAgent {
         return false;
     }
 
-    // Subscribe to topic and process messages
     subscribeToTopic() {
         try {
-            console.log(`[${this.agentType}] Starting subscription to topic ${this.topicId.toString()}`);
             new TopicMessageQuery()
                 .setTopicId(this.topicId)
                 .subscribe(this.hederaClient,
@@ -132,10 +113,8 @@ class LangChainAgent {
                             
                             if (decodedMessage.p === "hcs-10" && decodedMessage.op === "message") {
                                 const messageData = JSON.parse(decodedMessage.data);
-                                console.log(`[${this.agentType}] Processing message data:`, messageData);
                                 
                                 if (messageData.type === "user_report") {
-                                    console.log(`[${this.agentType}] Found matching message type`);
                                     await this.processMessage(messageData);
                                 }
                             }
@@ -144,7 +123,6 @@ class LangChainAgent {
                         }
                     }
                 );
-            console.log(`[${this.agentType}] Successfully subscribed to topic`);
         } catch (error) {
             console.error(`[${this.agentType}] Failed to subscribe to topic:`, error);
         }
@@ -152,7 +130,6 @@ class LangChainAgent {
 
     onMessage(handler) {
         this.messageHandler = handler;
-        console.log(`[${this.agentType}] Message handler set`);
     }
 }
 

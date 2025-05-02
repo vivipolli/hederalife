@@ -10,9 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@web3auth/base": "^9.6.0",
+    "@web3auth/default-evm-adapter": "^9.6.0",
+    "@web3auth/ethereum-provider": "^9.6.0",
+    "@web3auth/modal": "^9.6.0",
+    "@web3auth/modal-react-hooks": "^9.6.0",
     "antd": "^5.24.9",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.5.3",
+    "vite-plugin-node-polyfills": "^0.23.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

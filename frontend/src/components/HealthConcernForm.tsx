@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { Tabs, Button, Input, Tag, Checkbox, message, Card, Space } from 'antd';
 import { LoadingOutlined, HeartOutlined, BulbOutlined, TeamOutlined } from '@ant-design/icons';
+import { useWeb3Auth } from "@web3auth/modal-react-hooks";
 
 const { TextArea } = Input;
 
@@ -16,6 +17,8 @@ export const HealthConcernForm = () => {
     const [loading, setLoading] = useState(false);
     const [responses, setResponses] = useState<AgentResponse[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [selectedSuggestions, setSelectedSuggestions] = useState<Record<string, string[]>>({});
+    const { isConnected } = useWeb3Auth();
 
     useEffect(() => {
         const savedResponses = localStorage.getItem('healthResponses');
@@ -41,6 +44,45 @@ export const HealthConcernForm = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleSuggestionChange = (category: string, suggestion: string, checked: boolean) => {
+        setSelectedSuggestions(prev => {
+            const current = prev[category] || [];
+            if (checked) {
+                return { ...prev, [category]: [...current, suggestion] };
+            } else {
+                return { ...prev, [category]: current.filter(s => s !== suggestion) };
+            }
+        });
+    };
+
+    const saveSelectedHabits = () => {
+        if (!isConnected) {
+            message.error('Please sign in to save your habits');
+            return;
+        }
+
+        const savedHabits = localStorage.getItem('healthHabits') || '[]';
+        const existingHabits = JSON.parse(savedHabits);
+        
+        const newHabits = Object.entries(selectedSuggestions).flatMap(([category, suggestions]) => 
+            suggestions.map(suggestion => {
+                const [type, text] = suggestion.split(': ');
+                return {
+                    id: `${category}-${type}-${Date.now()}`,
+                    category,
+                    type: type.toLowerCase(),
+                    suggestion: text,
+                    completed: false,
+                    date: new Date().toISOString()
+                };
+            })
+        );
+
+        const updatedHabits = [...existingHabits, ...newHabits];
+        localStorage.setItem('healthHabits', JSON.stringify(updatedHabits));
+        message.success('Habits saved successfully!');
     };
 
     const extractSuggestions = (content: string, category: string) => {
@@ -101,7 +143,10 @@ export const HealthConcernForm = () => {
                     <Space direction="vertical" size="middle" style={{ width: '100%' }}>
                         {getUniqueSuggestions('mental').map(({ type, suggestion }, index) => (
                             <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                                <Checkbox style={{ marginRight: '16px' }} />
+                                <Checkbox 
+                                    onChange={(e) => handleSuggestionChange('mental', `${type}: ${suggestion}`, e.target.checked)}
+                                    style={{ marginRight: '16px' }} 
+                                />
                                 <Tag color={type === 'scientific' ? '#2d84eb' : '#8259ef'} style={{ marginRight: '16px' }}>
                                     {type.charAt(0).toUpperCase() + type.slice(1)}
                                 </Tag>
@@ -128,7 +173,10 @@ export const HealthConcernForm = () => {
                     <Space direction="vertical" size="middle" style={{ width: '100%' }}>
                         {getUniqueSuggestions('physical').map(({ type, suggestion }, index) => (
                             <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                                <Checkbox style={{ marginRight: '16px' }} />
+                                <Checkbox 
+                                    onChange={(e) => handleSuggestionChange('physical', `${type}: ${suggestion}`, e.target.checked)}
+                                    style={{ marginRight: '16px' }} 
+                                />
                                 <Tag color={type === 'scientific' ? '#2d84eb' : '#8259ef'} style={{ marginRight: '16px' }}>
                                     {type.charAt(0).toUpperCase() + type.slice(1)}
                                 </Tag>
@@ -155,7 +203,10 @@ export const HealthConcernForm = () => {
                     <Space direction="vertical" size="middle" style={{ width: '100%' }}>
                         {getUniqueSuggestions('spiritual').map(({ type, suggestion }, index) => (
                             <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                                <Checkbox style={{ marginRight: '16px' }} />
+                                <Checkbox 
+                                    onChange={(e) => handleSuggestionChange('spiritual', `${type}: ${suggestion}`, e.target.checked)}
+                                    style={{ marginRight: '16px' }} 
+                                />
                                 <Tag color={type === 'scientific' ? '#2d84eb' : '#8259ef'} style={{ marginRight: '16px' }}>
                                     {type.charAt(0).toUpperCase() + type.slice(1)}
                                 </Tag>
@@ -230,6 +281,27 @@ export const HealthConcernForm = () => {
                                 defaultActiveKey="mental"
                                 centered
                             />
+                            <div style={{ textAlign: 'center', marginTop: '24px' }}>
+                                <Button 
+                                    type="primary" 
+                                    onClick={saveSelectedHabits}
+                                    disabled={!isConnected}
+                                    style={{ 
+                                        maxWidth: '300px',
+                                        background: 'linear-gradient(135deg, #2d84eb 0%, #8259ef 100%)',
+                                        border: 'none',
+                                        color: '#fff',
+                                        height: '40px'
+                                    }}
+                                >
+                                    Save Selected Habits
+                                </Button>
+                                {!isConnected && (
+                                    <div style={{ marginTop: '8px', color: '#ff4d4f' }}>
+                                        Please sign in to save your habits
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </Space>

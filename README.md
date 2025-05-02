@@ -4,7 +4,7 @@ A comprehensive health and wellness platform that leverages Hedera's Hashgraph C
 
 ## Overview
 
-Hedera Life is a decentralized health assistant that combines multiple specialized AI agents to provide holistic health recommendations. The platform uses Hedera's HCS to ensure secure, transparent, and immutable communication between different health specialists (agents) and users.
+Hedera Life is a decentralized health assistant that combines multiple specialized AI agents to provide holistic health recommendations. The platform uses Hedera's HCS to ensure secure, transparent, and immutable communication between different health specialists (agents) and users. By making professional health advice accessible to everyone, regardless of location or financial means, Hedera Life democratizes access to quality health guidance. The platform's proactive approach to health management helps users prevent diseases before they develop, promoting long-term well-being through sustainable healthy habits. This preventive focus not only improves individual health outcomes but also contributes to reducing healthcare costs by minimizing the need for expensive medical interventions.
 
 ## Technical Implementation
 

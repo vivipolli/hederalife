@@ -1,12 +1,19 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Web3AuthProvider, useWeb3Auth } from "@web3auth/modal-react-hooks";
 import { Layout, Typography, ConfigProvider } from 'antd';
 import { HealthConcernForm } from './components/HealthConcernForm';
-import { Header } from './components/Header';
+import Header from './components/Header';
+import HealthHabitsPage from './pages/HealthHabitsPage';
+import SettingsPage from './pages/SettingsPage';
 import './App.css';
+import web3AuthContextConfig from "./config/web3auth.config";
 
 const { Content } = Layout;
 const { Title, Paragraph } = Typography;
 
-function App() {
+function AppContent() {
+  const { isConnected } = useWeb3Auth();
+
   return (
     <ConfigProvider
       theme={{
@@ -16,7 +23,7 @@ function App() {
         },
       }}
     >
-      <Layout style={{ minHeight: '100vh' }}>
+      <Router>
         <Header />
         <Content style={{ 
           background: 'linear-gradient(135deg, #2d84eb11 0%, #8259ef11 100%)',
@@ -34,11 +41,23 @@ function App() {
               </Title>
               <Paragraph type="secondary">Get personalized habits suggestions from our AI experts</Paragraph>
             </div>
-            <HealthConcernForm />
+            <Routes>
+              <Route path="/" element={<HealthConcernForm />} />
+              <Route path="/habits" element={isConnected ? <HealthHabitsPage /> : <HealthConcernForm />} />
+              <Route path="/settings" element={isConnected ? <SettingsPage /> : <HealthConcernForm />} />
+            </Routes>
           </div>
         </Content>
-      </Layout>
+      </Router>
     </ConfigProvider>
+  );
+}
+
+function App() {
+  return (
+    <Web3AuthProvider config={web3AuthContextConfig}>
+      <AppContent />
+    </Web3AuthProvider>
   );
 }
 
