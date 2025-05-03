@@ -1,4 +1,4 @@
-import { Layout, Button, Menu } from 'antd';
+import { Layout, Button } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { HeartOutlined, SettingOutlined } from '@ant-design/icons';
 import { useWeb3Auth } from "@web3auth/modal-react-hooks";

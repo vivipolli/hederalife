@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, List, Tag, Progress, Button, message } from 'antd';
+import { Card, List, Tag, Progress, Button } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 interface Habit {
@@ -13,7 +13,6 @@ interface Habit {
 
 export const HealthHabitsTracker = () => {
     const [habits, setHabits] = useState<Habit[]>([]);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const savedHabits = localStorage.getItem('healthHabits');

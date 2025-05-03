@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Form, Input, Select, Button, Card, Switch, Typography } from 'antd';
-import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -26,7 +25,6 @@ interface HealthProfile {
 
 const SettingsPage = () => {
   const [form] = Form.useForm();
-  const navigate = useNavigate();
   const [profile, setProfile] = useState<HealthProfile | null>(null);
 
   useEffect(() => {
