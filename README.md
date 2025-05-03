@@ -102,3 +102,52 @@ The frontend is built with React and Ant Design, featuring:
 - **Blockchain**: Hedera Hashgraph
 - **AI**: OpenRouter API
 - **Storage**: Hedera HCS for immutable message storage
+
+## 🚀 Future Roadmap
+
+### User Identity & Data Management
+- Implement unique user ID mapping from Web3Auth tokens
+- Enhance message storage with user-specific encryption
+- Develop user profile persistence across sessions
+- Create secure data sharing between agents
+
+### AI Agent Enhancements
+- Expand specialized agent network
+- Improve agent training with:
+  - Domain-specific datasets
+  - Real-world health case studies
+  - Medical research integration
+  - Cultural sensitivity training
+
+### Smart Prompt Engineering
+- Develop context-aware prompts for more personalized responses
+- Implement dynamic prompt adjustment based on:
+  - User's health history
+  - Previous interactions
+  - Cultural background
+  - Personal preferences
+- Create specialized prompts for different health conditions
+- Integrate evidence-based health guidelines
+
+### Health Tracking & Analytics
+- Enhanced habit tracking system with:
+  - Progress visualization
+  - Achievement badges
+  - Streak tracking
+  - Milestone celebrations
+- Smart notifications and reminders
+- Health progress analytics dashboard
+- Integration with wearable devices
+- Sleep pattern analysis
+- Activity level monitoring
+- Nutrition tracking
+
+### Community & Social Features
+- Health goal sharing
+- Community challenges
+- Success story sharing
+- Support groups
+
+
+
+Join us in building the future of personalized healthcare! 🌟

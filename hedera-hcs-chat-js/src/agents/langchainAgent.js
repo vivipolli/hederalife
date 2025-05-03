@@ -50,21 +50,34 @@ class LangChainAgent {
                     return await this.sendResponse(this.lastResponse);
                 }
                 
-                const prompt = `As a ${this.agentType} expert, analyze this health concern and provide specific, actionable suggestions in the following format:
+                const prompt = `As a ${this.agentType} expert, analyze this health concern and provide specific, actionable habits and tips that can help address the issue. For each health area, suggest practical daily habits that the person can implement:
 
                 Mental Health:
-                - Scientific: [evidence-based approaches]
-                - Holistic: [mind-body approaches]
+                - Scientific: [specific evidence-based habits and practices]
+                - Holistic: [practical mind-body habits and routines]
 
                 Physical Health:
-                - Scientific: [evidence-based approaches]
-                - Holistic: [mind-body approaches]
+                - Scientific: [specific evidence-based habits and practices]
+                - Holistic: [practical mind-body habits and routines]
 
                 Spiritual Health:
-                - Scientific: [evidence-based approaches]
-                - Holistic: [mind-body approaches]
+                - Scientific: [specific evidence-based habits and practices]
+                - Holistic: [practical mind-body habits and routines]
 
-                Focus on your area of expertise (${this.agentType}) and provide specific, actionable suggestions.`;
+                Example for insomnia:
+                Mental Health:
+                - Scientific: Establish a consistent bedtime routine, read a book before sleep
+                - Holistic: Practice gratitude journaling, avoid screens 1 hour before bed
+
+                Physical Health:
+                - Scientific: Regular exercise during the day, maintain consistent sleep schedule
+                - Holistic: Gentle yoga before bed, warm bath in the evening
+
+                Spiritual Health:
+                - Scientific: Mindfulness meditation, breathing exercises
+                - Holistic: Evening prayer or reflection, calming music
+
+                Focus on your area of expertise (${this.agentType}) and provide specific, actionable habits that can be easily incorporated into daily life. Each suggestion should be practical and directly related to addressing the health concern.`;
                 
                 const response = await this.llm.invoke([{ role: "user", content: prompt }]);
                 

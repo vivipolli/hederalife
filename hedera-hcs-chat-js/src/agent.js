@@ -18,7 +18,6 @@ async function initializeAgents() {
             const agent = new LangChainAgent(hederaClient, topicId, agentType);
             agents.set(agentType, agent);
             agent.subscribeToTopic();
-            console.log(`Initialized ${agentType} agent with topic ${topicId.toString()}`);
         } catch (error) {
             console.error(`Failed to initialize ${agentType} agent:`, error);
         }
@@ -26,8 +25,6 @@ async function initializeAgents() {
 }
 
 async function processHealthConcern(content) {
-    console.log('Processing health concern:', content);
-    
     if (agents.size === 0) {
         await initializeAgents();
     }
@@ -45,19 +42,16 @@ async function processHealthConcern(content) {
     };
 
     const message = JSON.stringify(formattedMessage);
-    console.log('Sending message to agents:', message);
 
     const agentPromises = Array.from(agents.values()).map(agent => {
         return new Promise((resolve) => {
             const timeout = setTimeout(() => {
-                console.log(`[${agent.agentType}] Timeout waiting for response`);
                 if (agent.lastResponse) {
-                    console.log(`[${agent.agentType}] Using last processed response due to timeout`);
                     resolve(agent.lastResponse);
                 } else {
                     resolve(null);
                 }
-            }, 120000); // 2 minutes timeout
+            }, 120000);
 
             const messageHandler = async (message) => {
                 try {
@@ -68,7 +62,6 @@ async function processHealthConcern(content) {
                         const messageData = JSON.parse(decodedMessage.data);
                         
                         if (messageData.type === "agent_response" && messageData.agent === agent.agentType) {
-                            console.log(`[${agent.agentType}] Received valid response:`, messageData);
                             clearTimeout(timeout);
                             resolve(messageData);
                         }
@@ -84,9 +77,6 @@ async function processHealthConcern(content) {
                 .setTopicId(agent.topicId)
                 .setMessage(message)
                 .execute(hederaClient)
-                .then(receipt => {
-                    console.log(`[${agent.agentType}] Message sent successfully:`, receipt.status);
-                })
                 .catch(error => {
                     console.error(`[${agent.agentType}] Error sending message:`, error);
                     clearTimeout(timeout);
@@ -96,10 +86,7 @@ async function processHealthConcern(content) {
     });
 
     const responses = await Promise.all(agentPromises);
-    console.log('Raw agent responses:', responses);
-
     const validResponses = responses.filter(response => response !== null);
-    console.log('Valid responses:', validResponses);
 
     return validResponses.map(response => ({
         agent: response.agent,
