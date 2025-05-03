@@ -27,7 +27,8 @@ function AppContent() {
         <Header />
         <Content style={{ 
           background: 'linear-gradient(135deg, #2d84eb11 0%, #8259ef11 100%)',
-          padding: '32px 0' 
+          padding: '32px 0',
+          height: '100vh'
         }}>
           <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 16px' }}>
             <div style={{ textAlign: 'center', marginBottom: '32px' }}>
@@ -39,7 +40,7 @@ function AppContent() {
               }}>
                 Health Assistant
               </Title>
-              <Paragraph type="secondary">Get personalized habits suggestions from our AI experts</Paragraph>
+              <Paragraph type="secondary">Get personalized health insights from our AI experts</Paragraph>
             </div>
             <Routes>
               <Route path="/" element={<HealthConcernForm />} />

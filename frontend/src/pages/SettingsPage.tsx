@@ -43,7 +43,7 @@ const SettingsPage = () => {
   return (
     <div style={{ maxWidth: '600px', margin: '0 auto' }}>
       <Title level={2} style={{ textAlign: 'center', marginBottom: '24px' }}>
-        Health Profile Settings
+        Profile Settings
       </Title>
 
       <Card>
